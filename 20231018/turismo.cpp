@@ -44,6 +44,9 @@ class Evento{
         Evento(int _duracao){
             this->duracao = _duracao;
         }
+    public:
+        virtual void imprimir() = 0;
+
 };
 
 class Roteiro : public Evento{
@@ -53,6 +56,13 @@ class Roteiro : public Evento{
         Roteiro(int _duracao, string _titulo, int _ordem):Evento(_duracao){
             this->titulo = _titulo;
             this->ordem = _ordem;
+        }
+
+        void imprimir() override{
+            cout << "-- Roteiro --" << endl;
+            cout << "Titulo: " << this->titulo << endl;
+            cout << "Ordem: " << this->ordem << endl;
+            cout << "Duracao: " << this->duracao << endl;
         }
 
 };
@@ -66,6 +76,13 @@ class Deslocamento : public Evento{
             this->destino = _destino;
         }
 
+        void imprimir() override{
+            cout << "-- Deslocamento --" << endl;
+            cout << "De: " << this->origem << endl;
+            cout << "Para: " << this->destino << endl;
+            cout << "Duracao: " << this->duracao << endl;
+        }
+
 };
 
 class Pernoite : public Evento{
@@ -74,13 +91,18 @@ class Pernoite : public Evento{
         Pernoite(int _duracao,string _local=""):Evento(_duracao){
             this->local = _local;
         }
+
+        void imprimir() override{
+            cout << "-- Pernoite --" << endl;
+            cout << "Local: " << this->local << endl;
+            cout << "Duracao: " << this->duracao << endl;
+        }
 };
 
 class Pacote{
-    private:
-        vector<Evento*> listaEventos;
-    
     public:
+        vector<Evento*> listaEventos;
+
         Pacote(Evento *_evento){
             listaEventos.push_back(_evento);
         }
@@ -88,6 +110,7 @@ class Pacote{
         void inserirEvento(Evento *_evento){
             listaEventos.push_back(_evento);
         }
+
         //todo: métodos para acessar (inserir, listar) eventos
 };
 
@@ -124,6 +147,23 @@ int main(){
     Pacote *bronze = new Pacote(r1); //polimorfismo
     bronze->inserirEvento(d1);
     bronze->inserirEvento(p1);
+    
+    for(auto el : bronze->listaEventos){
+        cout << endl;
+        el->imprimir();
+    }
+/* outras formas do laço for
+    for(Evento* el : bronze->listaEventos){
+        cout << endl;
+        el->imprimir();
+    }
+
+    for(int i=0; i < bronze->listaEventos.size();i++){
+        cout << endl;
+        // bronze->listaEventos.at(i)->imprimir();
+        //bronze->listaEventos[i]->imprimir();
+    }
+*/
 
     Reserva *reserva01 = new Reserva(cli01,bronze);
     
